@@ -1,0 +1,12 @@
+{
+    "dependencies": {
+        "nodemon": "1.18.3"
+    },
+    "scripts": {
+        "start": "node index.js"
+    },
+    "name": "node_design_patterns",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT"
+}
