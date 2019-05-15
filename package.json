@@ -1,6 +1,8 @@
 {
     "dependencies": {
-        "nodemon": "1.18.3"
+        "jest": "^24.7.1",
+        "nodemon": "1.18.3",
+        "stampit": "^4.2.0"
     },
     "scripts": {
         "start": "node index.js"
