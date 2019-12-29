@@ -12,3 +12,14 @@ function readJSON(filename, callback) {
 		callback(null, parsed);
 	});
 }
+
+let cb = (err, data) => {
+	if (err) {
+		return console.error(err);
+	}
+
+	console.log(data);
+};
+
+readJSON('valid.json', cb);
+readJSON('invalid.json', cb);
