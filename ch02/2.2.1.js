@@ -1,4 +1,4 @@
-const mod = (() => {
+module.exports = (() => {
 	const privateFoo = () => {};
 	const privateBar = () => [];
 
@@ -9,4 +9,3 @@ const mod = (() => {
 
 	return exportd;
 })();
-console.log(mod);
