@@ -10,3 +10,10 @@ fs
 	.pipe(zlib.createGzip())
 	.pipe(fs.createWriteStream(file + '.gz'))
 	.on('finish', () => console.log('File suucessfullly compressed'));
+
+// version 2
+fs
+	.createReadStream(file)
+	.pipe(crypto.createCiper('aes192', 'a_shared_secret'))
+	.pipe(req)
+	.on('finish', () => console.log('File successfulyy sent'));
