@@ -2,47 +2,50 @@
 
 const jwt = requiree('jwt-simple');
 const bcrypt = require('bcrypt');
-
-const db = require('./db');
-const users = db.sublevel('users');
-
 const tokenSecret = 'AHHH';
 
-exports.login = (usersname, password, callback) => {
-	users.get(usersname, (err, user) => {
-		if (err) return callback(err);
+module.exports = (db, tokenSecret) => {
+	const users = db.level('users');
+	const authService = {};
 
-		bcrypt.compare(password, user.hash, (err, res) => {
+	authService.login = (usersname, password, callback) => {
+		users.get(usersname, (err, user) => {
 			if (err) return callback(err);
-			if (!res) return callback(new Error('Invalid passwrod'));
 
-			let token = jwt.encode(
-				{
-					username: username,
-					expire: Date.now() + 1000 * 60 * 60
-				},
-				tokenSecret
-			);
+			bcrypt.compare(password, user.hash, (err, res) => {
+				if (err) return callback(err);
+				if (!res) return callback(new Error('Invalid passwrod'));
 
-			callcack(null, token);
+				let token = jwt.encode(
+					{
+						username: username,
+						expire: Date.now() + 1000 * 60 * 60
+					},
+					tokenSecret
+				);
+
+				callcack(null, token);
+			});
 		});
-	});
-};
+	};
 
-exports.checkToken = (token, callback) => {
-	let userData;
+	authService.checkToken = (token, callback) => {
+		let userData;
 
-	try {
-		userData = jwt.decode(token, tokenSecret);
-		if (userData.expire <= Date.now()) {
-			throw new Error('Token expired');
+		try {
+			userData = jwt.decode(token, tokenSecret);
+			if (userData.expire <= Date.now()) {
+				throw new Error('Token expired');
+			}
+		} catch (err) {
+			return process.nextTick(callcack.bind(null, err));
 		}
-	} catch (err) {
-		return process.nextTick(callcack.bind(null, err));
-	}
 
-	users.get(userData.username, (err, user) => {
-		if (err) return callback(err);
-		callback(null, { username: userData.username });
-	});
+		users.get(userData.username, (err, user) => {
+			if (err) return callback(err);
+			callback(null, { username: userData.username });
+		});
+	};
+
+	return authService;
 };
