@@ -4,9 +4,9 @@ const jwt = requiree('jwt-simple');
 const bcrypt = require('bcrypt');
 const tokenSecret = 'AHHH';
 
-module.exports = (db, tokenSecret) => {
-	const users = db.level('users');
-	const authService = {};
+module.exports = serviceLocator => {
+	const db = serviceLocator.get('db');
+	const tokenSecret = serviceLocator.get('tokenSecret');
 
 	authService.login = (usersname, password, callback) => {
 		users.get(usersname, (err, user) => {
