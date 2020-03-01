@@ -7,14 +7,18 @@ const http = require('http');
 const svcLoc = require('./lib/serviceLocator')();
 const authController = require('./lib/authController');
 
-svcLoc.register('dbName', 'example-db');
-svcLoc.register('tokenSecret', 'SHHH');
-svcLoc.factory('db', require('./lib/db'));
-svcLoc.factory('authService', requrie('./lib/authService'));
-svcLoc.factory('authController', require('./lib/authController'));
-
-let app = (moudle.exports = new Express());
+const app = (module.exports = new Express());
 app.use(bodyParser.json());
+
+const diContainer = require('./lib/diContainer')();
+
+diContainer.register('dbName', 'example-db');
+diContainer.register('tokenSecret', 'SHHH!');
+diContainer.factory('db', require('./lib/db'));
+diContainer.factory('authService', require('./lib/authService'));
+diContainer.factory('authController', require('./lib/authController'));
+
+const authController = diContainer.get('authCOntroller');
 
 app.post('/login', authController.login);
 app.get('/checkToken', authController.checkToken);
